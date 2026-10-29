@@ -86,10 +86,18 @@ CaelisScreen()
 @Composable
 private fun CaelisScreen() {
 var input by remember { mutableStateOf("") }
+val context = LocalContext.current
+
 val messages = remember {
-mutableStateListOf(
-"CAELIS 0.1 запущен. Ожидаю команду."
-)
+    ConversationMemory.load(context)
+        .toMutableStateList()
+        .also {
+            if (it.isEmpty()) {
+                it.add(
+                    "CAELIS 0.2 запущен. Ожидаю команду."
+                )
+            }
+        }
 }
 val engine = remember { CaelisEngine() }
 val keyboard = LocalSoftwareKeyboardController.current
