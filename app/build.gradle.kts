@@ -4,7 +4,12 @@ id("org.jetbrains.kotlin.android")
 id("org.jetbrains.kotlin.plugin.compose")
 }
 
-android {
+android {    sourceSets {
+        getByName("main") {
+            manifest.srcFile("app/src/main/AndroidManifest.xml")
+            java.srcDirs("app/src/main/java")
+        }
+    }
 namespace = "com.caelis.app"
 compileSdk = 35
 
