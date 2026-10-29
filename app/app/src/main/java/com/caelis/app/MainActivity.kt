@@ -184,15 +184,7 @@ Column(
     }
 
     Spacer(Modifier.height(14.dp))
-
-    Text(
-        "COMMUNICATION LOG",
         Row(
-    modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.SpaceBetween,
-    verticalAlignment = Alignment.CenterVertically
-) {
-            Row(
     modifier = Modifier.fillMaxWidth(),
     horizontalArrangement = Arrangement.SpaceBetween,
     verticalAlignment = Alignment.CenterVertically
@@ -213,7 +205,8 @@ Column(
         Text(
             "CLEAR",
             color = Muted,
-            fontSize = 10.sp
+            fontSize = 
+10.sp
         )
     }
 }
