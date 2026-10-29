@@ -1,5 +1,7 @@
 package com.caelis.app
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.toMutableStateList
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
