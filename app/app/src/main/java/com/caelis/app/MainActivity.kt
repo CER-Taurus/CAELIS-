@@ -87,6 +87,9 @@ CaelisScreen()
 private fun CaelisScreen() {
 var input by remember { mutableStateOf("") }
 val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+var isThinking by remember { mutableStateOf(false) }
+var cloudStatus by remember { mutableStateOf("READY") }
 
 val messages = remember {
     ConversationMemory.load(context)
@@ -105,13 +108,38 @@ val focusManager = LocalFocusManager.current
 
 fun sendCommand() {
     val command = input.trim()
-    if (command.isNotEmpty()) {
+
+    if (command.isNotEmpty() && !isThinking) {
         messages.add("YOU  /  $command")
-        messages.add("CAELIS  /  ${engine.process(command)}")
-        ConversationMemory.save(context, messages)
+
         input = ""
         keyboard?.hide()
         focusManager.clearFocus()
+        isThinking = true
+
+        scope.launch {
+            try {
+                val reply = CaelisApiClient.sendMessage(
+                    context,
+                    command
+                )
+
+                messages.add("CAELIS  /  $reply")
+                cloudStatus = "CONNECTED"
+
+            } catch (e: Exception) {
+                cloudStatus = "OFFLINE"
+
+                messages.add(
+                    "CAELIS  /  Ошибка облачного ИИ: " +
+                    (e.message ?: "проверь интернет")
+                )
+
+            } finally {
+                ConversationMemory.save(context, messages)
+                isThinking = false
+            }
+        }
     }
 }
 
@@ -178,7 +206,7 @@ Column(
             }
             Spacer(Modifier.height(12.dp))
             StatusRow("LOCAL ENGINE", "ACTIVE")
-            StatusRow("CLOUD INTELLIGENCE", "NOT CONNECTED")
+            StatusRow("CLOUD INTELLIGENCE", cloudStatus)
             StatusRow("VOICE INTERFACE", "PLANNED")
         }
     }
