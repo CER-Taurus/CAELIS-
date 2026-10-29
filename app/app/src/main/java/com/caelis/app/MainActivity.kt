@@ -1,4 +1,3 @@
-package com.caelis.app
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.toMutableStateList
@@ -108,6 +107,7 @@ fun sendCommand() {
     if (command.isNotEmpty()) {
         messages.add("YOU  /  $command")
         messages.add("CAELIS  /  ${engine.process(command)}")
+        ConversationMemory.save(context, messages)
         input = ""
         keyboard?.hide()
         focusManager.clearFocus()
@@ -186,11 +186,33 @@ Column(
 
     Text(
         "COMMUNICATION LOG",
+        Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically
+) {
+    Text(
+        "COMMUNICATION LOG",
         color = Muted,
         fontSize = 10.sp,
         letterSpacing = 2.sp
     )
-    Spacer(Modifier.height(7.dp))
+
+    androidx.compose.material3.TextButton(
+        onClick = {
+            messages.clear()
+            ConversationMemory.clear(context)
+        }
+    ) {
+        Text(
+            "CLEAR",
+            color = Muted,
+            fontSize = 10.sp
+        )
+    }
+}
+
+Spacer(Modifier.height(7.dp))
 
     LazyColumn(
         modifier = Modifier
