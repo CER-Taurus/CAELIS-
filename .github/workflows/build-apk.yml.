@@ -1,6 +1,6 @@
 name: Build CAELIS APK
 
-on:
+"on":
 push:
 branches:
 - main
